@@ -1,0 +1,22 @@
+@font-face {
+  font-family: "EuclidCircularA-Medium";
+  src: url("./fonts/EuclidCircularA-Medium.otf");
+}
+
+:root {
+  --primary-color: #0556f3;
+  --programiz-brand-divider: #d3dce6;
+  --programiz-text-primary: #25265e;
+  --programiz-brand-asset-background: #f8faff;
+  --programiz-brand-artwork-background: #ffe8d6;
+  --programiz-brand-secondary: #6501e5;
+}
+
+* {
+  font-family: "EuclidCircularA-Medium";
+  color: var(--programiz-text-primary);
+}
+
+body {
+  margin: 24px;
+}

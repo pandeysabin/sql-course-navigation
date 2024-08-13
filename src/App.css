@@ -1,0 +1,40 @@
+.nav-container {
+  max-width: 250px;
+  border-right: 2px solid var(--programiz-brand-divider);
+  height: 100vh;
+}
+
+h4,
+h5 {
+  margin: auto;
+}
+
+hr {
+  background-color: var(--programiz-brand-divider);
+  height: 1px;
+  border: none;
+}
+
+.lessons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.lesson {
+  opacity: 0.5;
+  position: relative;
+  list-style: none;
+}
+
+.lessons > .lesson::before {
+  position: absolute;
+  content: "";
+  border: 1px solid var(--programiz-brand-divider);
+  border-right: none;
+  border-top: none;
+  width: 10px;
+  bottom: 8px;
+  left: -16px;
+  height: 100%;
+}
