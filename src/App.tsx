@@ -31,6 +31,13 @@ function App() {
           );
         })}
       </nav>
+
+      <div className="body-container">
+        <div>
+          <input id="query-input" placeholder="SELECT * FROM lessons" />
+        </div>
+        <div id="table-container"></div>
+      </div>
     </main>
   );
 }
