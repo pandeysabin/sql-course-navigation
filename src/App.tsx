@@ -1,3 +1,5 @@
+import * as React from "react";
+
 import "./App.css";
 import { CHAPTERS } from "./consts";
 
@@ -7,8 +9,8 @@ function App() {
       <nav className="nav-container">
         {CHAPTERS.map((chapter, chapterIdx) => {
           return (
-            <>
-              <div key={chapter.id}>
+            <React.Fragment key={chapter.id}>
+              <div>
                 <div className="course-name">
                   <h4>{chapter.name}</h4>
                 </div>
@@ -27,7 +29,7 @@ function App() {
               </div>
 
               {chapterIdx !== CHAPTERS.length - 1 && <hr />}
-            </>
+            </React.Fragment>
           );
         })}
       </nav>
