@@ -5,7 +5,9 @@ import { CHAPTERS } from "./consts";
 import { TChapter } from "./interface";
 
 function App() {
-  const [userQuery, setUserQuery] = React.useState("");
+  const [userQuery, setUserQuery] = React.useState(
+    `SELECT * FROM ${CHAPTERS[0].id};`
+  );
 
   const [selectedChapter, setSelectedChapter] = React.useState<TChapter>();
 
@@ -35,14 +37,16 @@ function App() {
               <div>
                 <div>
                   <h4>{chapter.id}</h4>
-                  <span className="course-name"> ({chapter.name})</span>
+                  <span className="course-name">({chapter.name})</span>
                 </div>
 
                 <ol className="lessons">
                   {chapter.lessons.map((lesson) => {
                     return (
                       <li className="lesson" key={lesson.id}>
-                        <h5 className="lesson-name">{lesson.name}</h5>
+                        <span style={{ fontSize: 14 }} className="lesson-name">
+                          {lesson.name}
+                        </span>
                       </li>
                     );
                   })}
@@ -59,6 +63,7 @@ function App() {
         <form onSubmit={handleQueryRun} className="query-form">
           <input
             id="query-input"
+            value={userQuery}
             placeholder="SELECT * FROM chapter_01;"
             onChange={({ target: { value } }) => {
               setUserQuery(value);
