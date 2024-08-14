@@ -18,10 +18,8 @@ function App() {
                 <ol className="lessons">
                   {chapter.lessons.map((lesson) => {
                     return (
-                      <li className="lesson">
-                        <h5 className="lesson-name" key={lesson.id}>
-                          {lesson.name}
-                        </h5>
+                      <li className="lesson" key={lesson.id}>
+                        <h5 className="lesson-name">{lesson.name}</h5>
                       </li>
                     );
                   })}
