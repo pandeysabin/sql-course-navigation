@@ -1,7 +1,8 @@
 .nav-container {
   max-width: 250px;
   border-right: 2px solid var(--programiz-brand-divider);
-  height: 100vh;
+  height: 100%;
+  padding-right: 12px;
 }
 
 h4,

@@ -55,7 +55,7 @@ function App() {
   ];
 
   return (
-    <main>
+    <main className="main-container">
       <nav className="nav-container">
         {chapters.map((chapter, chapterIdx) => {
           return (
@@ -69,7 +69,9 @@ function App() {
                   {chapter.lessons.map((lesson) => {
                     return (
                       <li className="lesson">
-                        <h5 key={lesson.id}>{lesson.name}</h5>
+                        <h5 className="lesson-name" key={lesson.id}>
+                          {lesson.name}
+                        </h5>
                       </li>
                     );
                   })}
