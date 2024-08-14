@@ -2,7 +2,7 @@ import { TChapter } from "./interface";
 
 export const CHAPTERS: TChapter[] = [
   {
-    id: "chapter-01",
+    id: "chapter_01",
     name: "Introduction",
     lessons: [
       {
@@ -12,7 +12,7 @@ export const CHAPTERS: TChapter[] = [
     ],
   },
   {
-    id: "chapter-02",
+    id: "chapter_02",
     name: "SQL Basic Queries",
     lessons: [
       {
@@ -26,7 +26,7 @@ export const CHAPTERS: TChapter[] = [
     ],
   },
   {
-    id: "chapter-03",
+    id: "chapter_03",
     name: "Intermediate Questions",
     lessons: [
       {
@@ -45,7 +45,7 @@ export const CHAPTERS: TChapter[] = [
     ],
   },
   {
-    id: "chapter-04",
+    id: "chapter_04",
     name: "Advanced Questions",
     lessons: [
       {
@@ -65,7 +65,7 @@ export const CHAPTERS: TChapter[] = [
   },
 
   {
-    id: "chapter-05",
+    id: "chapter_05",
     name: "What's Wrong With This Code?",
     lessons: [
       { id: "lesson-01", name: "Introduction" },
