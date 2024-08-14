@@ -3,6 +3,11 @@
   src: url("./fonts/EuclidCircularA-Medium.otf");
 }
 
+@font-face {
+  font-family: "EuclidCircularA-Regular";
+  src: url("./fonts/EuclidCircularA-Regular.otf");
+}
+
 :root {
   --primary-color: #0556f3;
   --programiz-brand-divider: #d3dce6;
@@ -30,4 +35,9 @@ body {
 
 .main-container {
   height: 100%;
+}
+
+a {
+  text-decoration: none;
+  color: var(--primary-color);
 }
