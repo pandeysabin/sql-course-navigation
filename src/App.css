@@ -47,13 +47,13 @@ hr {
 .lessons {
   display: flex;
   flex-direction: column;
-  gap: 8px;
 }
 
 .lesson {
   opacity: 0.5;
   position: relative;
   list-style: none;
+  padding-bottom: 6px;
 }
 
 .lessons > .lesson::before {
@@ -63,7 +63,7 @@ hr {
   border-right: none;
   border-top: none;
   width: 10px;
-  bottom: 8px;
+  bottom: 14px;
   left: -16px;
   height: 100%;
 }
