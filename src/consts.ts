@@ -1,48 +1,20 @@
-import { TChapter } from "./interface";
+import { TChapter, TLessonTable } from "./interface";
 
 export const CHAPTERS: TChapter[] = [
   {
     id: "chapter_01",
     name: "Introduction",
-    lessons: [
-      {
-        id: "lesson-1",
-        name: "Introduction to Course",
-      },
-    ],
+    lessons: [],
   },
   {
     id: "chapter_02",
     name: "SQL Basic Queries",
-    lessons: [
-      {
-        id: "lesson-1",
-        name: "Top 4 Teams in the Leauge",
-      },
-      { id: "lesson-2", name: "Popular Books in the Last Decade" },
-      { id: "lesson-3", name: "Laptop vs. Mobile Viewership" },
-      { id: "lesson-4", name: "Either/Or But Not Both" },
-      { id: "lesson-5", name: "Order Alphabetically When Condition is Met" },
-    ],
+    lessons: [],
   },
   {
     id: "chapter_03",
     name: "Intermediate Questions",
-    lessons: [
-      {
-        id: "lesson-1",
-        name: "Retrieve Orders Delivered In Certain Days",
-      },
-      { id: "lesson-2", name: "Sort the Monthly Sales" },
-      { id: "lesson-3", name: "Sort the Candidates in Ascending Order" },
-      { id: "lesson-4", name: "Books With Multiple Words But No 'Z'" },
-      { id: "lesson-5", name: "Movies With Duration Greater Than Average" },
-      { id: "lesson-6", name: "Anime With Above Average Ratings" },
-      { id: "lesson-7", name: "Largest Non-Repeating Number" },
-      { id: "lesson-8", name: "Interesting Movies With Odd Numbered IDs" },
-      { id: "lesson-9", name: "Daily Active Users" },
-      { id: "lesson-10", name: "JOIN Two Tables" },
-    ],
+    lessons: [],
   },
   {
     id: "chapter_04",
@@ -87,3 +59,136 @@ export const CHAPTERS: TChapter[] = [
     ],
   },
 ];
+
+export const LESSONS_TABLE_DATA: TLessonTable[] = [
+  {
+    chapter_id: "chapter_01",
+    difficulty: "",
+    lesson_id: "lesson-01",
+    link: "",
+    title: "Introduction to Course",
+  },
+  {
+    lesson_id: "lesson-01",
+    title: "Top 4 Teams in the Leauge",
+    chapter_id: "chapter_02",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-02",
+    title: "Popular Books in the Last Decade",
+    chapter_id: "chapter_02",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-03",
+    title: "Laptop vs. Mobile Viewership",
+    chapter_id: "chapter_02",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-04",
+    title: "Either/Or But Not Both",
+    chapter_id: "",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-05",
+    title: "Order Alphabetically When Condition is Met",
+    chapter_id: "chapter_02",
+    difficulty: "",
+    link: "",
+  },
+
+  {
+    lesson_id: "lesson-1",
+    title: "Retrieve Orders Delivered In Certain Days",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-2",
+    title: "Sort the Monthly Sales",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-3",
+    title: "Sort the Candidates in Ascending Order",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-4",
+    title: "Books With Multiple Words But No 'Z'",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-5",
+    title: "Movies With Duration Greater Than Average",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-6",
+    title: "Anime With Above Average Ratings",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-7",
+    title: "Largest Non-Repeating Number",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+
+  {
+    lesson_id: "lesson-8",
+    title: "Interesting Movies With Odd Numbered IDs",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-9",
+    title: "Daily Active Users",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-10",
+    title: "JOIN Two Tables",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+];
+
+const TABLES = {
+  LESSONS: "lessons",
+} as const;
+
+export const CREATE_LESSON_TABLE_QUERY = `CREATE TABLE ${TABLES.LESSONS} (id INT PRIMARY KEY, lesson_id VARCHAR(50), title VARCHAR(50), chapter_id VARCHAR(50), link VARCHAR(50), difficulty VARCHAR(50));`;
+
+export const DATA_TO_INSERT_TO_LESSON_TABLE = `INSERT INTO ${
+  TABLES.LESSONS
+} (lesson_id, title, chapter_id, link, difficulty)
+  VALUES
+  ${LESSONS_TABLE_DATA.map(
+    ({ chapter_id, difficulty, lesson_id, link, title }) => {
+      return `("${lesson_id}", "${title}", "${chapter_id}", "${link}", "${difficulty}")`;
+    }
+  ).join(",")};`;
