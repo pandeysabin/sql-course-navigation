@@ -183,7 +183,7 @@ const TABLES = {
 
 export const CREATE_LESSON_TABLE_QUERY = `CREATE TABLE ${TABLES.LESSONS} (id INT PRIMARY KEY, lesson_id VARCHAR(50), title VARCHAR(50), chapter_id VARCHAR(50), link VARCHAR(50), difficulty VARCHAR(50));`;
 
-export const DATA_TO_INSERT_TO_LESSON_TABLE = `INSERT INTO ${
+export const DATA_TO_INSERT_TO_LESSON_TABLE_QUERY = `INSERT INTO ${
   TABLES.LESSONS
 } (lesson_id, title, chapter_id, link, difficulty)
   VALUES
