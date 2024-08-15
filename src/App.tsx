@@ -1,32 +1,96 @@
 import * as React from "react";
 
+import initSqlJs, { Database } from "sql.js";
+
 import "./App.css";
-import { CHAPTERS } from "./consts";
-import { TChapter } from "./interface";
+import {
+  CHAPTERS,
+  CREATE_LESSON_TABLE_QUERY,
+  DATA_TO_INSERT_TO_LESSON_TABLE_QUERY,
+} from "./consts";
 
 function App() {
-  const [userQuery, setUserQuery] = React.useState(
-    `SELECT * FROM ${CHAPTERS[0].id};`
-  );
+  const [userQuery, setUserQuery] = React.useState(`SELECT * FROM lessons;`);
 
-  const [selectedChapter, setSelectedChapter] = React.useState<TChapter>();
+  const [queryResult, setQueryResult] = React.useState<{
+    result: initSqlJs.QueryExecResult[] | null;
+    error: string | null;
+  }>({
+    result: null,
+    error: null,
+  });
+
+  const [db, setDb] = React.useState<Database>();
+
+  const [error, setError] = React.useState<string>();
+
+  const initDatabase = async () => {
+    try {
+      const SQL = await initSqlJs({
+        locateFile: (file) => `https://sql.js.org/dist/${file}`,
+      });
+
+      setDb(new SQL.Database());
+    } catch (err) {
+      let message = "Error while instantiating the database.";
+
+      if (err instanceof Error) {
+        message = err.message;
+      }
+
+      setError(message);
+    }
+  };
+
+  React.useEffect(() => {
+    initDatabase();
+  }, []);
+
+  React.useEffect(() => {
+    try {
+      if (db !== undefined) {
+        const query = `${CREATE_LESSON_TABLE_QUERY}${DATA_TO_INSERT_TO_LESSON_TABLE_QUERY}`;
+
+        db.run(query);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, [db]);
+
+  console.log({ queryResult });
 
   const handleQueryRun = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const splittedBySemiColon = userQuery.split(";");
-    const stringAfterJoin = splittedBySemiColon.join("");
+    if (db === undefined) {
+      return;
+    }
 
-    const splittedBySpace = stringAfterJoin.split(" ");
+    try {
+      const result = db.exec(userQuery);
 
-    const chapter_name = splittedBySpace[splittedBySpace.length - 1];
+      setQueryResult({ error: null, result });
+    } catch (error) {
+      let message = "Unable to execute the query";
 
-    const chapterSelectedByUserQuery = CHAPTERS.find(
-      (chapter) => chapter.id === chapter_name
-    );
+      if (error instanceof Error) {
+        message = error.message;
+      }
 
-    setSelectedChapter(chapterSelectedByUserQuery);
+      setQueryResult({ error: message, result: null });
+
+      console.error(message);
+    }
   };
+
+  if (db === undefined) {
+    return <p>loading...</p>;
+  }
+
+  if (error !== undefined) {
+    return <p>{error}</p>;
+  }
 
   return (
     <main className="main-container">
@@ -76,13 +140,13 @@ function App() {
         </form>
 
         <div id="table-container">
-          {selectedChapter !== undefined ? (
+          {queryResult !== undefined ? (
             <table className="chapter-table">
               <caption>
                 <span style={{ fontFamily: "EuclidCircularA-Regular" }}>
                   Chapter:
                 </span>
-                <span style={{ marginLeft: 8 }}>{selectedChapter?.name}</span>
+                <span style={{ marginLeft: 8 }}></span>
               </caption>
               <thead>
                 <tr>
@@ -94,18 +158,14 @@ function App() {
               </thead>
 
               <tbody>
-                {selectedChapter?.lessons.map((lesson) => {
-                  return (
-                    <tr key={lesson.id}>
-                      <td>{lesson.id}</td>
-                      <td>{lesson.name}</td>
-                      <td>
-                        <a href="#">Link here</a>
-                      </td>
-                      <td>1</td>
-                    </tr>
-                  );
-                })}
+                {/* <tr key={lesson.id}>
+                  <td>{lesson.id}</td>
+                  <td>{lesson.name}</td>
+                  <td>
+                    <a href="#">Link here</a>
+                  </td>
+                  <td>1</td>
+                </tr> */}
               </tbody>
             </table>
           ) : (
