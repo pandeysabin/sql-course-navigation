@@ -117,3 +117,7 @@ td {
   opacity: 0.6;
   font-family: "EuclidCircularA-Regular";
 }
+
+.chapter-table > caption {
+  margin-bottom: 8px;
+}

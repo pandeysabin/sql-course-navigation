@@ -78,7 +78,12 @@ function App() {
         <div id="table-container">
           {selectedChapter !== undefined ? (
             <table className="chapter-table">
-              <caption>Chapter: {selectedChapter?.name}</caption>
+              <caption>
+                <span style={{ fontFamily: "EuclidCircularA-Regular" }}>
+                  Chapter:
+                </span>
+                <span style={{ marginLeft: 8 }}>{selectedChapter?.name}</span>
+              </caption>
               <thead>
                 <tr>
                   <th>lesson_id</th>
