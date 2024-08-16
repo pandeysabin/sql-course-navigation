@@ -4,12 +4,18 @@ import initSqlJs, { Database } from "sql.js";
 
 import "./App.css";
 import {
+  CHAPTER_FIELDS_WITH_DATA_TYPE,
   CHAPTERS,
   CREATE_CHAPTERS_TABLE_QUERY,
   CREATE_LESSON_TABLE_QUERY,
   DATA_TO_INSERT_TO_CHAPTER_TABLE_QUERY,
   DATA_TO_INSERT_TO_LESSON_TABLE_QUERY,
+  FIELDS_BY_TABLE,
+  LESSONS_FIELDS_DATA_TYPE,
   TABLES,
+  TChapterTableField,
+  TLessonTableField,
+  TTable,
 } from "./consts";
 
 function App() {
@@ -103,6 +109,30 @@ function App() {
     }
   };
 
+  const getFieldDataTypeForChapter = (
+    table: TTable,
+    fieldName: TChapterTableField | TLessonTableField
+  ) => {
+    switch (table) {
+      case "chapters":
+        return (
+          <span className="course-name">
+            ({CHAPTER_FIELDS_WITH_DATA_TYPE[fieldName]})
+          </span>
+        );
+
+      case "lessons":
+        return (
+          <span className="course-name">
+            ({LESSONS_FIELDS_DATA_TYPE[fieldName]})
+          </span>
+        );
+
+      default:
+        break;
+    }
+  };
+
   if (db === undefined) {
     return <p>loading...</p>;
   }
@@ -114,22 +144,22 @@ function App() {
   return (
     <main className="main-container">
       <nav className="nav-container">
-        {CHAPTERS.map((chapter, chapterIdx) => {
+        {Object.values(TABLES).map((table, chapterIdx) => {
           return (
-            <React.Fragment key={chapter.id}>
+            <React.Fragment key={table}>
               <div>
                 <div>
-                  <h4>{chapter.id}</h4>
-                  <span className="course-name">({chapter.name})</span>
+                  <h4>{table}</h4>
                 </div>
 
-                <ol className="lessons">
-                  {chapter.lessons.map((lesson) => {
+                <ol className="fields">
+                  {FIELDS_BY_TABLE[table].map((field) => {
                     return (
-                      <li className="lesson" key={lesson.id}>
+                      <li className="field" key={field}>
                         <span style={{ fontSize: 14 }} className="lesson-name">
-                          {lesson.name}
+                          {field}
                         </span>
+                        {getFieldDataTypeForChapter(table, field)}
                       </li>
                     );
                   })}
