@@ -117,14 +117,14 @@ function App() {
       case "chapters":
         return (
           <span className="course-name">
-            ({CHAPTER_FIELDS_WITH_DATA_TYPE[fieldName]})
+            [{CHAPTER_FIELDS_WITH_DATA_TYPE[fieldName]}]
           </span>
         );
 
       case "lessons":
         return (
           <span className="course-name">
-            ({LESSONS_FIELDS_DATA_TYPE[fieldName]})
+            [{LESSONS_FIELDS_DATA_TYPE[fieldName]}]
           </span>
         );
 
