@@ -4,19 +4,13 @@ import initSqlJs, { Database } from "sql.js";
 
 import "./App.css";
 import {
-  CHAPTER_FIELDS_WITH_DATA_TYPE,
   CHAPTERS,
   CREATE_CHAPTERS_TABLE_QUERY,
   CREATE_LESSON_TABLE_QUERY,
   DATA_TO_INSERT_TO_CHAPTER_TABLE_QUERY,
   DATA_TO_INSERT_TO_LESSON_TABLE_QUERY,
-  FIELDS_BY_TABLE,
-  LESSONS_FIELDS_DATA_TYPE,
-  TABLES,
-  TChapterTableField,
-  TLessonTableField,
-  TTable,
 } from "./consts";
+import { TTableInfo } from "./interface";
 
 function App() {
   const [userQuery, setUserQuery] = React.useState(`SELECT * FROM lessons;`);
@@ -35,6 +29,8 @@ function App() {
   const [db, setDb] = React.useState<Database>();
 
   const [error, setError] = React.useState<string>();
+
+  const [tableInfo, setTableInfo] = React.useState<TTableInfo[]>();
 
   const initDatabase = async () => {
     try {
@@ -65,25 +61,44 @@ function App() {
           `${CREATE_LESSON_TABLE_QUERY}${DATA_TO_INSERT_TO_LESSON_TABLE_QUERY}${CREATE_CHAPTERS_TABLE_QUERY}${DATA_TO_INSERT_TO_CHAPTER_TABLE_QUERY}` as const;
 
         db.run(query);
-
-        const tablesWitData = Object.values(TABLES).reduce(
-          (acc: Record<string, initSqlJs.QueryExecResult[]>, curr) => {
-            const res = db.exec(`SELECT * FROM ${curr}`);
-
-            acc = { ...acc, [curr]: res };
-
-            return acc;
-          },
-
-          {}
-        );
-
-        setActiveTables(tablesWitData);
       }
     } catch (error) {
       console.error(error);
     }
   }, [db]);
+
+  React.useEffect(() => {
+    if (db !== undefined) {
+      const tablesResult = db.exec(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%';"
+      );
+
+      const tableNames = tablesResult[0] ? tablesResult[0].values.flat() : [];
+
+      let newTables = structuredClone(activeTables);
+
+      const tables = tableNames.map((tableName): TTableInfo => {
+        const allDataOfTheTable = db.exec(`SELECT * FROM ${tableName}`);
+
+        newTables = { ...newTables, [tableName]: allDataOfTheTable };
+
+        const result = db.exec(`PRAGMA table_info(${tableName})`);
+
+        return {
+          fieldsWithType: result[0].values.map((col) => ({
+            dataType: col[2]?.toString() ?? "",
+            fieldName: col[1]?.toString() ?? "",
+          })),
+
+          tableName: tableName?.toString() ?? "",
+        };
+      });
+
+      setActiveTables(newTables);
+
+      setTableInfo(tables);
+    }
+  }, [queryResult, db]);
 
   const handleQueryRun = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -109,30 +124,6 @@ function App() {
     }
   };
 
-  const getFieldDataTypeForChapter = (
-    table: TTable,
-    fieldName: TChapterTableField | TLessonTableField
-  ) => {
-    switch (table) {
-      case "chapters":
-        return (
-          <span className="course-name">
-            [{CHAPTER_FIELDS_WITH_DATA_TYPE[fieldName]}]
-          </span>
-        );
-
-      case "lessons":
-        return (
-          <span className="course-name">
-            [{LESSONS_FIELDS_DATA_TYPE[fieldName]}]
-          </span>
-        );
-
-      default:
-        break;
-    }
-  };
-
   if (db === undefined) {
     return <p>loading...</p>;
   }
@@ -144,22 +135,23 @@ function App() {
   return (
     <main className="main-container">
       <nav className="nav-container">
-        {Object.values(TABLES).map((table, chapterIdx) => {
+        {tableInfo?.map((table, chapterIdx) => {
           return (
-            <React.Fragment key={table}>
+            <React.Fragment key={table.tableName}>
               <div>
                 <div>
-                  <h4>{table}</h4>
+                  <h4>{table.tableName}</h4>
                 </div>
 
                 <ol className="fields">
-                  {FIELDS_BY_TABLE[table].map((field) => {
+                  {table.fieldsWithType.map((field) => {
                     return (
-                      <li className="field" key={field}>
+                      <li className="field" key={field.fieldName}>
                         <span style={{ fontSize: 14 }} className="lesson-name">
-                          {field}
+                          {field.fieldName}
                         </span>
-                        {getFieldDataTypeForChapter(table, field)}
+
+                        <span className="course-name">[{field.dataType}]</span>
                       </li>
                     );
                   })}
@@ -177,7 +169,7 @@ function App() {
           <input
             id="query-input"
             value={userQuery}
-            placeholder="SELECT * FROM chapter_01;"
+            placeholder="Write your query"
             onChange={({ target: { value } }) => {
               setUserQuery(value);
             }}
@@ -188,19 +180,25 @@ function App() {
           </button>
         </form>
 
-        {queryResult.result?.map((result) => (
-          <table>
+        {queryResult.error && (
+          <p style={{ color: "red" }}>{queryResult.error}</p>
+        )}
+
+        {queryResult.result?.map((result, resultIdx) => (
+          <table key={`table-of-query-result-${resultIdx}`}>
             <thead>
               <tr>
                 {result.columns.map((column) => (
-                  <th>{column}</th>
+                  <th key={column}>{column}</th>
                 ))}
               </tr>
             </thead>
 
             <tbody>
-              {result.values.map((value) => (
-                <tr>
+              {result.values.map((value, queryResultTBodyIdx) => (
+                <tr
+                  key={`query-result-body-row-${resultIdx}-${queryResultTBodyIdx}`}
+                >
                   {value.map((rowValue) => (
                     <td key={rowValue?.toString()}>{rowValue}</td>
                   ))}
@@ -212,33 +210,37 @@ function App() {
       </div>
 
       <div id="table-container">
-        {Object.keys(activeTables ?? {}).map((tableName) => (
-          <table className="chapter-table" key={tableName}>
-            <caption>
-              <span style={{ fontFamily: "EuclidCircularA-Regular" }}>
-                Chapter:
-              </span>
-              <span style={{ marginLeft: 8 }}> {tableName}</span>
-            </caption>
-            <thead>
-              <tr>
-                {activeTables?.[tableName][0].columns.map((column) => (
-                  <th key={column}>{column}</th>
-                ))}
-              </tr>
-            </thead>
+        {Object.keys(activeTables ?? {}).map((tableName, tableIdx) => {
+          if (activeTables?.[tableName].length === 0) return null;
 
-            <tbody>
-              {activeTables?.[tableName][0].values.map((row) => (
+          return (
+            <table className="chapter-table" key={tableName}>
+              <caption>
+                <span style={{ fontFamily: "EuclidCircularA-Regular" }}>
+                  Chapter:
+                </span>
+                <span style={{ marginLeft: 8 }}> {tableName}</span>
+              </caption>
+              <thead>
                 <tr>
-                  {row.map((rowValue) => (
-                    <td key={rowValue?.toString()}>{rowValue}</td>
+                  {activeTables?.[tableName][0]?.columns.map((column) => (
+                    <th key={column}>{column}</th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        ))}
+              </thead>
+
+              <tbody>
+                {activeTables?.[tableName][0]?.values.map((row, idx) => (
+                  <tr key={`${tableName}-${tableIdx}-availbleTable-row-${idx}`}>
+                    {row.map((rowValue) => (
+                      <td key={rowValue?.toString()}>{rowValue}</td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          );
+        })}
       </div>
     </main>
   );

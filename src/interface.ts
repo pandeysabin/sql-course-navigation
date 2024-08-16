@@ -6,3 +6,11 @@ type TLesson = {
 };
 
 export type TChapter = { name: string; id: string; lessons: TLesson[] };
+
+export type TTableInfo = {
+  tableName: string;
+  fieldsWithType: {
+    fieldName: string;
+    dataType: string;
+  }[];
+};
