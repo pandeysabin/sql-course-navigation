@@ -1,4 +1,4 @@
-import { TChapter, TLessonTable } from "./interface";
+import { TChapter, TChapterTable, TLessonTable } from "./interface";
 
 export const CHAPTERS: TChapter[] = [
   {
@@ -92,7 +92,7 @@ export const LESSONS_TABLE_DATA: TLessonTable[] = [
   {
     lesson_id: "lesson-04",
     title: "Either/Or But Not Both",
-    chapter_id: "",
+    chapter_id: "chapter_02",
     difficulty: "",
     link: "",
   },
@@ -177,11 +177,41 @@ export const LESSONS_TABLE_DATA: TLessonTable[] = [
   },
 ];
 
-const TABLES = {
+export const CHAPTERS_TABLE_DATA: TChapterTable[] = [
+  {
+    chapter_id: "chapter_01",
+    name: "Introduction",
+    no_of_lessons: 1,
+  },
+
+  {
+    chapter_id: "chapter_02",
+    name: "SQL Basic Queries",
+    no_of_lessons: 5,
+  },
+
+  {
+    chapter_id: "chapter_03",
+    name: "Intermediate Questions",
+    no_of_lessons: 10,
+  },
+];
+
+export const TABLES = {
   LESSONS: "lessons",
+  CHAPTERS: "chapters",
 } as const;
 
-export const CREATE_LESSON_TABLE_QUERY = `CREATE TABLE ${TABLES.LESSONS} (id INT PRIMARY KEY, lesson_id VARCHAR(50), title VARCHAR(50), chapter_id VARCHAR(50), link VARCHAR(50), difficulty VARCHAR(50));`;
+const LESSON_TABLE_FIEDS = [
+  "lesson_id",
+  "title",
+  "chapter_id",
+  "link",
+  "difficulty",
+] as const;
+
+export const CREATE_LESSON_TABLE_QUERY =
+  `CREATE TABLE ${TABLES.LESSONS} (id INT PRIMARY KEY, lesson_id VARCHAR(50), title VARCHAR(50), chapter_id VARCHAR(50), link VARCHAR(50), difficulty VARCHAR(50));` as const;
 
 export const DATA_TO_INSERT_TO_LESSON_TABLE_QUERY = `INSERT INTO ${
   TABLES.LESSONS
@@ -191,4 +221,21 @@ export const DATA_TO_INSERT_TO_LESSON_TABLE_QUERY = `INSERT INTO ${
     ({ chapter_id, difficulty, lesson_id, link, title }) => {
       return `("${lesson_id}", "${title}", "${chapter_id}", "${link}", "${difficulty}")`;
     }
-  ).join(",")};`;
+  ).join(",")};` as const;
+
+export const CREATE_CHAPTERS_TABLE_QUERY = `CREATE TABLE ${TABLES.CHAPTERS} (
+chapter_id VARCHAR(50) PRIMARY KEY,
+name VARCHAR(50),
+no_of_lessons INT
+);`;
+
+export const DATA_TO_INSERT_TO_CHAPTER_TABLE_QUERY = `INSERT INTO ${
+  TABLES.CHAPTERS
+} (
+chapter_id,
+name,
+no_of_lessons
+) VALUES ${CHAPTERS_TABLE_DATA.map(
+  ({ chapter_id, name, no_of_lessons }) =>
+    `("${chapter_id}", "${name}", "${no_of_lessons}")`
+)};` as const;
