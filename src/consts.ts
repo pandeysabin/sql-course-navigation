@@ -1,4 +1,9 @@
-import { TChapter, TChapterTable, TLessonTable } from "./interface";
+import { TChapter } from "./interface";
+
+export const TABLES = {
+  LESSONS: "lessons",
+  CHAPTERS: "chapters",
+} as const;
 
 export const CHAPTERS: TChapter[] = [
   {
@@ -60,149 +65,7 @@ export const CHAPTERS: TChapter[] = [
   },
 ];
 
-export const LESSONS_TABLE_DATA: TLessonTable[] = [
-  {
-    chapter_id: "chapter_01",
-    difficulty: "",
-    lesson_id: "lesson-01",
-    link: "",
-    title: "Introduction to Course",
-  },
-  {
-    lesson_id: "lesson-01",
-    title: "Top 4 Teams in the Leauge",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-02",
-    title: "Popular Books in the Last Decade",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-03",
-    title: "Laptop vs. Mobile Viewership",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-04",
-    title: "Either/Or But Not Both",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-05",
-    title: "Order Alphabetically When Condition is Met",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
-  },
-
-  {
-    lesson_id: "lesson-1",
-    title: "Retrieve Orders Delivered In Certain Days",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-2",
-    title: "Sort the Monthly Sales",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-3",
-    title: "Sort the Candidates in Ascending Order",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-4",
-    title: "Books With Multiple Words But No 'Z'",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-5",
-    title: "Movies With Duration Greater Than Average",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-6",
-    title: "Anime With Above Average Ratings",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-7",
-    title: "Largest Non-Repeating Number",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-
-  {
-    lesson_id: "lesson-8",
-    title: "Interesting Movies With Odd Numbered IDs",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-9",
-    title: "Daily Active Users",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-10",
-    title: "JOIN Two Tables",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-];
-
-export const CHAPTERS_TABLE_DATA: TChapterTable[] = [
-  {
-    chapter_id: "chapter_01",
-    name: "Introduction",
-    no_of_lessons: 1,
-  },
-
-  {
-    chapter_id: "chapter_02",
-    name: "SQL Basic Queries",
-    no_of_lessons: 5,
-  },
-
-  {
-    chapter_id: "chapter_03",
-    name: "Intermediate Questions",
-    no_of_lessons: 10,
-  },
-];
-
-export const TABLES = {
-  LESSONS: "lessons",
-  CHAPTERS: "chapters",
-} as const;
-
-const LESSON_TABLE_FIEDS = [
+const LESSON_TABLE_FIELDS = [
   "lesson_id",
   "title",
   "chapter_id",
@@ -210,12 +73,181 @@ const LESSON_TABLE_FIEDS = [
   "difficulty",
 ] as const;
 
-export const CREATE_LESSON_TABLE_QUERY =
-  `CREATE TABLE ${TABLES.LESSONS} (id INT PRIMARY KEY, lesson_id VARCHAR(50), title VARCHAR(50), chapter_id VARCHAR(50), link VARCHAR(50), difficulty VARCHAR(50));` as const;
+type TLessonTableField = (typeof LESSON_TABLE_FIELDS)[number];
+
+export const LESSONS_TABLE_DATA: Record<TLessonTableField, string>[] = [
+  {
+    chapter_id: "chapter_01",
+    difficulty: "",
+    lesson_id: "lesson-01-01",
+    link: "",
+    title: "Introduction to Course",
+  },
+  {
+    lesson_id: "lesson-02-01",
+    title: "Top 4 Teams in the Leauge",
+    chapter_id: "chapter_02",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-02-02",
+    title: "Popular Books in the Last Decade",
+    chapter_id: "chapter_02",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-02-03",
+    title: "Laptop vs. Mobile Viewership",
+    chapter_id: "chapter_02",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-02-04",
+    title: "Either/Or But Not Both",
+    chapter_id: "chapter_02",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-02-05",
+    title: "Order Alphabetically When Condition is Met",
+    chapter_id: "chapter_02",
+    difficulty: "",
+    link: "",
+  },
+
+  {
+    lesson_id: "lesson-03-01",
+    title: "Retrieve Orders Delivered In Certain Days",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-03-02",
+    title: "Sort the Monthly Sales",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-03-03",
+    title: "Sort the Candidates in Ascending Order",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-03-04",
+    title: "Books With Multiple Words But No 'Z'",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-03-05",
+    title: "Movies With Duration Greater Than Average",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-03-06",
+    title: "Anime With Above Average Ratings",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-03-07",
+    title: "Largest Non-Repeating Number",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+
+  {
+    lesson_id: "lesson-03-08",
+    title: "Interesting Movies With Odd Numbered IDs",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-03-09",
+    title: "Daily Active Users",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+  {
+    lesson_id: "lesson-03-10",
+    title: "JOIN Two Tables",
+    chapter_id: "chapter_03",
+    difficulty: "",
+    link: "",
+  },
+];
+
+const CHAPTER_TABLE_FIELDS = ["chapter_id", "title", "no_of_lessons"] as const;
+
+type TChapterTableField = (typeof CHAPTER_TABLE_FIELDS)[number];
+
+export const CHAPTERS_TABLE_DATA: Record<
+  TChapterTableField,
+  string | number
+>[] = [
+  {
+    chapter_id: "chapter_01",
+    title: "Introduction",
+    no_of_lessons: 1,
+  },
+
+  {
+    chapter_id: "chapter_02",
+    title: "SQL Basic Queries",
+    no_of_lessons: 5,
+  },
+
+  {
+    chapter_id: "chapter_03",
+    title: "Intermediate Questions",
+    no_of_lessons: 10,
+  },
+];
+
+const CHAPTER_FIELDS_WITH_DATA_TYPE: Record<TChapterTableField, string> = {
+  chapter_id: "varchar(50)",
+  no_of_lessons: "int",
+  title: "varchar(50)",
+};
+
+// ObjectValues<typeof LESSON_TABLE_FIEDS>;
+
+const LESSONS_FIELDS_DATA_TYPE: Record<TLessonTableField, string> = {
+  lesson_id: "VARCHAR(50) PRIMARY KEY",
+  title: "VARCHAR(50)",
+  chapter_id: "VARCHAR(50)",
+  difficulty: "VARCHAR(50)",
+  link: "VARCHAR(50)",
+} as const;
+
+export const CREATE_LESSON_TABLE_QUERY = `CREATE TABLE ${TABLES.LESSONS} (
+  ${Object.keys(LESSONS_FIELDS_DATA_TYPE)
+    .map(
+      (fieldWithDataType) =>
+        // @ts-expect-error Object.keys() doesn't give constant value
+        `${fieldWithDataType} ${LESSONS_FIELDS_DATA_TYPE[fieldWithDataType]}`
+    )
+    .join(", ")}
+  );` as const;
 
 export const DATA_TO_INSERT_TO_LESSON_TABLE_QUERY = `INSERT INTO ${
   TABLES.LESSONS
-} (lesson_id, title, chapter_id, link, difficulty)
+} (${LESSON_TABLE_FIELDS.map((field) => field).join(", ")})
   VALUES
   ${LESSONS_TABLE_DATA.map(
     ({ chapter_id, difficulty, lesson_id, link, title }) => {
@@ -224,18 +256,19 @@ export const DATA_TO_INSERT_TO_LESSON_TABLE_QUERY = `INSERT INTO ${
   ).join(",")};` as const;
 
 export const CREATE_CHAPTERS_TABLE_QUERY = `CREATE TABLE ${TABLES.CHAPTERS} (
-chapter_id VARCHAR(50) PRIMARY KEY,
-name VARCHAR(50),
-no_of_lessons INT
-);`;
+${Object.keys(CHAPTER_FIELDS_WITH_DATA_TYPE)
+  .map(
+    // @ts-expect-error Object.keys() is unable to find the type of the parameter
+    (fieldName) => `${fieldName} ${CHAPTER_FIELDS_WITH_DATA_TYPE[fieldName]}`
+  )
+  .join(", ")}
+);` as const;
 
 export const DATA_TO_INSERT_TO_CHAPTER_TABLE_QUERY = `INSERT INTO ${
   TABLES.CHAPTERS
 } (
-chapter_id,
-name,
-no_of_lessons
+${CHAPTER_TABLE_FIELDS.map((field) => field).join(", ")}
 ) VALUES ${CHAPTERS_TABLE_DATA.map(
-  ({ chapter_id, name, no_of_lessons }) =>
-    `("${chapter_id}", "${name}", "${no_of_lessons}")`
+  ({ chapter_id, title, no_of_lessons }) =>
+    `("${chapter_id}", "${title}", "${no_of_lessons}")`
 )};` as const;
