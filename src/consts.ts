@@ -1,8 +1,8 @@
 import { ObjectValues, TChapter } from "./interface";
 
 export const TABLES = {
-  LESSONS: "lessons",
   CHAPTERS: "chapters",
+  LESSONS: "lessons",
 } as const;
 
 export type TTable = ObjectValues<typeof TABLES>;
