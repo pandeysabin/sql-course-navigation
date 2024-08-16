@@ -5,8 +5,11 @@ import initSqlJs, { Database } from "sql.js";
 import "./App.css";
 import {
   CHAPTERS,
+  CREATE_CHAPTERS_TABLE_QUERY,
   CREATE_LESSON_TABLE_QUERY,
+  DATA_TO_INSERT_TO_CHAPTER_TABLE_QUERY,
   DATA_TO_INSERT_TO_LESSON_TABLE_QUERY,
+  TABLES,
 } from "./consts";
 
 function App() {
@@ -19,6 +22,9 @@ function App() {
     result: null,
     error: null,
   });
+
+  const [activeTables, setActiveTables] =
+    React.useState<Record<string, initSqlJs.QueryExecResult[]>>();
 
   const [db, setDb] = React.useState<Database>();
 
@@ -49,16 +55,29 @@ function App() {
   React.useEffect(() => {
     try {
       if (db !== undefined) {
-        const query = `${CREATE_LESSON_TABLE_QUERY}${DATA_TO_INSERT_TO_LESSON_TABLE_QUERY}`;
+        const query =
+          `${CREATE_LESSON_TABLE_QUERY}${DATA_TO_INSERT_TO_LESSON_TABLE_QUERY}${CREATE_CHAPTERS_TABLE_QUERY}${DATA_TO_INSERT_TO_CHAPTER_TABLE_QUERY}` as const;
 
         db.run(query);
+
+        const tablesWitData = Object.values(TABLES).reduce(
+          (acc: Record<string, initSqlJs.QueryExecResult[]>, curr) => {
+            const res = db.exec(`SELECT * FROM ${curr}`);
+
+            acc = { ...acc, [curr]: res };
+
+            return acc;
+          },
+
+          {}
+        );
+
+        setActiveTables(tablesWitData);
       }
     } catch (error) {
       console.error(error);
     }
   }, [db]);
-
-  console.log({ queryResult });
 
   const handleQueryRun = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -139,41 +158,57 @@ function App() {
           </button>
         </form>
 
-        <div id="table-container">
-          {queryResult !== undefined ? (
-            <table className="chapter-table">
-              <caption>
-                <span style={{ fontFamily: "EuclidCircularA-Regular" }}>
-                  Chapter:
-                </span>
-                <span style={{ marginLeft: 8 }}></span>
-              </caption>
-              <thead>
-                <tr>
-                  <th>lesson_id</th>
-                  <th>title</th>
-                  <th>link</th>
-                  <th>difficulty</th>
-                </tr>
-              </thead>
+        {queryResult.result?.map((result) => (
+          <table>
+            <thead>
+              <tr>
+                {result.columns.map((column) => (
+                  <th>{column}</th>
+                ))}
+              </tr>
+            </thead>
 
-              <tbody>
-                {/* <tr key={lesson.id}>
-                  <td>{lesson.id}</td>
-                  <td>{lesson.name}</td>
-                  <td>
-                    <a href="#">Link here</a>
-                  </td>
-                  <td>1</td>
-                </tr> */}
-              </tbody>
-            </table>
-          ) : (
-            <div>
-              <h1 style={{ margin: 24 }}>Table will be displayed here</h1>
-            </div>
-          )}
-        </div>
+            <tbody>
+              {result.values.map((value) => (
+                <tr>
+                  {value.map((rowValue) => (
+                    <td key={rowValue?.toString()}>{rowValue}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ))}
+      </div>
+
+      <div id="table-container">
+        {Object.keys(activeTables ?? {}).map((tableName) => (
+          <table className="chapter-table" key={tableName}>
+            <caption>
+              <span style={{ fontFamily: "EuclidCircularA-Regular" }}>
+                Chapter:
+              </span>
+              <span style={{ marginLeft: 8 }}> {tableName}</span>
+            </caption>
+            <thead>
+              <tr>
+                {activeTables?.[tableName][0].columns.map((column) => (
+                  <th key={column}>{column}</th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody>
+              {activeTables?.[tableName][0].values.map((row) => (
+                <tr>
+                  {row.map((rowValue) => (
+                    <td key={rowValue?.toString()}>{rowValue}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ))}
       </div>
     </main>
   );

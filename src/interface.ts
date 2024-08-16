@@ -12,3 +12,9 @@ export type TLessonTable = {
   link: string;
   difficulty: string;
 };
+
+export type TChapterTable = {
+  chapter_id: string;
+  name: string;
+  no_of_lessons: number;
+};
