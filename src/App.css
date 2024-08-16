@@ -17,6 +17,9 @@
   flex-direction: column;
   flex: 1;
   gap: 16px;
+  border-right: 2px solid var(--programiz-brand-divider);
+  padding-right: 16px;
+  overflow-x: scroll;
 }
 
 .course-name {
@@ -35,9 +38,8 @@
 }
 
 #table-container {
-  outline: 1px solid var(--programiz-brand-divider);
+  overflow: auto;
   flex: 1;
-  overflow-y: scroll;
 }
 
 h4,
@@ -100,7 +102,6 @@ hr {
 
 table {
   border: 1px solid var(--programiz-brand-divider);
-  margin: 24px;
   border-collapse: collapse;
   border-radius: 4px;
   width: 100%;
