@@ -1,9 +1,68 @@
-import { TChapter } from "./interface";
+import { ObjectValues, TChapter } from "./interface";
 
 export const TABLES = {
   LESSONS: "lessons",
   CHAPTERS: "chapters",
 } as const;
+
+export type TTable = ObjectValues<typeof TABLES>;
+
+const CHAPTER_TABLE_FIELDS = ["chapter_id", "title", "no_of_lessons"] as const;
+export type TChapterTableField = (typeof CHAPTER_TABLE_FIELDS)[number];
+
+export const CHAPTER_FIELDS_WITH_DATA_TYPE: Record<TChapterTableField, string> =
+  {
+    chapter_id: "varchar(50)",
+    no_of_lessons: "int",
+    title: "varchar(50)",
+  };
+
+const LESSON_TABLE_FIELDS = [
+  "lesson_id",
+  "title",
+  "chapter_id",
+  "link",
+  "difficulty",
+] as const;
+export type TLessonTableField = (typeof LESSON_TABLE_FIELDS)[number];
+
+export const LESSONS_FIELDS_DATA_TYPE: Record<TLessonTableField, string> = {
+  lesson_id: "varchar(50)",
+  title: "varchar(50)",
+  chapter_id: "varchar(50)",
+  difficulty: "varchar(50)",
+  link: "varchar(50)",
+} as const;
+
+export const FIELDS_BY_TABLE = Object.values(TABLES).reduce(
+  (
+    acc: Record<
+      TTable,
+      readonly TChapterTableField[] | readonly TLessonTableField[]
+    >,
+    curr
+  ) => {
+    switch (curr) {
+      case "chapters":
+        acc = {
+          ...acc,
+          [curr]: CHAPTER_TABLE_FIELDS,
+        };
+        break;
+
+      case "lessons":
+        acc = { ...acc, [curr]: LESSON_TABLE_FIELDS };
+        break;
+
+      default:
+        return acc;
+    }
+
+    return acc;
+  },
+
+  { lessons: [], chapters: [] }
+);
 
 export const CHAPTERS: TChapter[] = [
   {
@@ -64,16 +123,6 @@ export const CHAPTERS: TChapter[] = [
     ],
   },
 ];
-
-const LESSON_TABLE_FIELDS = [
-  "lesson_id",
-  "title",
-  "chapter_id",
-  "link",
-  "difficulty",
-] as const;
-
-type TLessonTableField = (typeof LESSON_TABLE_FIELDS)[number];
 
 export const LESSONS_TABLE_DATA: Record<TLessonTableField, string>[] = [
   {
@@ -192,10 +241,6 @@ export const LESSONS_TABLE_DATA: Record<TLessonTableField, string>[] = [
   },
 ];
 
-const CHAPTER_TABLE_FIELDS = ["chapter_id", "title", "no_of_lessons"] as const;
-
-type TChapterTableField = (typeof CHAPTER_TABLE_FIELDS)[number];
-
 export const CHAPTERS_TABLE_DATA: Record<
   TChapterTableField,
   string | number
@@ -219,21 +264,7 @@ export const CHAPTERS_TABLE_DATA: Record<
   },
 ];
 
-const CHAPTER_FIELDS_WITH_DATA_TYPE: Record<TChapterTableField, string> = {
-  chapter_id: "varchar(50)",
-  no_of_lessons: "int",
-  title: "varchar(50)",
-};
-
 // ObjectValues<typeof LESSON_TABLE_FIEDS>;
-
-const LESSONS_FIELDS_DATA_TYPE: Record<TLessonTableField, string> = {
-  lesson_id: "VARCHAR(50) PRIMARY KEY",
-  title: "VARCHAR(50)",
-  chapter_id: "VARCHAR(50)",
-  difficulty: "VARCHAR(50)",
-  link: "VARCHAR(50)",
-} as const;
 
 export const CREATE_LESSON_TABLE_QUERY = `CREATE TABLE ${TABLES.LESSONS} (
   ${Object.keys(LESSONS_FIELDS_DATA_TYPE)
