@@ -78,7 +78,6 @@ hr {
 .query-form {
   display: flex;
   gap: 8px;
-  max-width: 50%;
 }
 
 .query-run-button {
@@ -101,6 +100,7 @@ table {
   margin: 24px;
   border-collapse: collapse;
   border-radius: 4px;
+  width: 100%;
 }
 
 th {
