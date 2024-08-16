@@ -63,12 +63,13 @@ hr {
   display: flex;
   gap: 4px;
   flex-wrap: wrap;
+  opacity: 0.8;
 }
 
 .fields > .field::before {
   position: absolute;
   content: "";
-  border: 1px solid var(--programiz-brand-divider);
+  border: 2px solid var(--programiz-brand-divider);
   border-right: none;
   border-top: none;
   width: 10px;
