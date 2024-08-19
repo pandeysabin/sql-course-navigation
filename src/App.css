@@ -1,15 +1,12 @@
 .main-container {
   display: flex;
   gap: 16px;
-  width: 100vw;
+  height: 100%;
 }
 
 .nav-container {
-  max-width: 250px;
   border-right: 2px solid var(--programiz-brand-divider);
-  height: 100%;
   padding-right: 12px;
-  overflow-x: auto;
 }
 
 .body-container {
