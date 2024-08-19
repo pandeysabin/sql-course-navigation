@@ -58,7 +58,7 @@ function App() {
     try {
       if (db !== undefined) {
         const query =
-          `${CREATE_LESSON_TABLE_QUERY}${DATA_TO_INSERT_TO_LESSON_TABLE_QUERY}${CREATE_CHAPTERS_TABLE_QUERY}${DATA_TO_INSERT_TO_CHAPTER_TABLE_QUERY}` as const;
+          `${CREATE_CHAPTERS_TABLE_QUERY}${DATA_TO_INSERT_TO_CHAPTER_TABLE_QUERY}${CREATE_LESSON_TABLE_QUERY}${DATA_TO_INSERT_TO_LESSON_TABLE_QUERY}` as const;
 
         db.run(query);
       }
