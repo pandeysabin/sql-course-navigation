@@ -1,4 +1,4 @@
-import { ObjectValues, TChapter } from "./interface";
+import { ObjectValues, TChapter, TLesson } from "./interface";
 
 export const TABLES = {
   CHAPTERS: "chapters",
@@ -12,7 +12,7 @@ export type TChapterTableField = (typeof CHAPTER_TABLE_FIELDS)[number];
 
 export const CHAPTER_FIELDS_WITH_DATA_TYPE: Record<TChapterTableField, string> =
   {
-    chapter_id: "varchar(50)",
+    chapter_id: "int",
     no_of_lessons: "int",
     title: "varchar(50)",
   };
@@ -21,17 +21,17 @@ const LESSON_TABLE_FIELDS = [
   "lesson_id",
   "title",
   "chapter_id",
-  "link",
-  "difficulty",
+  // "link",
+  // "difficulty",
 ] as const;
 export type TLessonTableField = (typeof LESSON_TABLE_FIELDS)[number];
 
 export const LESSONS_FIELDS_DATA_TYPE: Record<TLessonTableField, string> = {
-  lesson_id: "varchar(50)",
+  lesson_id: "int",
   title: "varchar(50)",
   chapter_id: "varchar(50)",
-  difficulty: "varchar(50)",
-  link: "varchar(50)",
+  // difficulty: "varchar(50)",
+  // link: "varchar(50)",
 } as const;
 
 export const FIELDS_BY_TABLE = Object.values(TABLES).reduce(
@@ -66,205 +66,114 @@ export const FIELDS_BY_TABLE = Object.values(TABLES).reduce(
 
 export const CHAPTERS: TChapter[] = [
   {
-    id: "chapter_01",
-    name: "Introduction",
-    lessons: [],
+    id: 1,
+    title: "Introduction",
   },
   {
-    id: "chapter_02",
-    name: "SQL Basic Queries",
-    lessons: [],
+    id: 2,
+    title: "Select Records",
   },
   {
-    id: "chapter_03",
-    name: "Intermediate Questions",
-    lessons: [],
+    id: 3,
+    title: "Aggregrate Functions",
   },
   {
-    id: "chapter_04",
-    name: "Advanced Questions",
-    lessons: [
-      {
-        id: "lesson-01",
-        name: "Delete Duplicate Rows From a Table",
-      },
-      { id: "lesson-02", name: "Top 3 Highest-Paid Employees" },
-      { id: "lesson-03", name: "Pivot Tables" },
-      { id: "lesson-04", name: "Fix the Names" },
-      { id: "lesson-04", name: "Customer Payment in 7 Days" },
-      { id: "lesson-06", name: "JOIN Three Tables" },
-      { id: "lesson-07", name: "Employees and Salaries" },
-      { id: "lesson-08", name: "Query Optimization" },
-      { id: "lesson-09", name: "Gameplay Analysis" },
-      { id: "lesson-10", name: "Highest Rated Episode" },
-    ],
+    id: 4,
+    title: "Filter Records",
   },
 
   {
-    id: "chapter_05",
-    name: "What's Wrong With This Code?",
-    lessons: [
-      { id: "lesson-01", name: "Introduction" },
-      { id: "lesson-02", name: "Unique Key Logical Error" },
-      { id: "lesson-03", name: "Naming Conflict" },
-      { id: "lesson-04", name: "String vs. Numeric Comparison" },
-      { id: "lesson-05", name: "JOIN Type" },
-      { id: "lesson-06", name: "Wrong Use of GROUP BY" },
-      { id: "lesson-07", name: "Using BETWEEN" },
-      { id: "lesson-08", name: "ON DELETE CASCADE" },
-      { id: "lesson-09", name: "Missing WHERE Clause" },
-      { id: "lesson-10", name: "Multiple Primary Keys" },
-      { id: "lesson-11", name: "Reference Error" },
-      { id: "lesson-12", name: "Incorrect Table Alias" },
-      { id: "lesson-13", name: "Incorrect Alias Reference" },
-      { id: "lesson-14", name: "Logical Error" },
-      { id: "lesson-15", name: "Incorrect JOIN Reference" },
-      { id: "lesson-16", name: "Incorrect Use of CASE" },
-    ],
+    id: 5,
+    title: "JOINs",
   },
+  { id: 6, title: "Subquery" },
+  { id: 7, title: "Insert, Update & Delete" },
+  { id: 8, title: "Working With Tables" },
+  { id: 9, title: "Constraints" },
+  {
+    id: 10,
+    title: "Additional Topics",
+  },
+  { id: 11, title: "SQL Queries" },
 ];
 
-export const LESSONS_TABLE_DATA: Record<TLessonTableField, string>[] = [
+const LESSONS: TLesson[] = [
   {
-    chapter_id: "chapter_01",
-    difficulty: "",
-    lesson_id: "lesson-01-01",
-    link: "",
-    title: "Introduction to Course",
+    title: "Getting Started",
+    chapter_id: 1,
   },
   {
-    lesson_id: "lesson-02-01",
-    title: "Top 4 Teams in the Leauge",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
+    chapter_id: 1,
+    title: "Introduction to Database",
   },
   {
-    lesson_id: "lesson-02-02",
-    title: "Popular Books in the Last Decade",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
+    title: "SQL SELECT",
+    chapter_id: 2,
   },
-  {
-    lesson_id: "lesson-02-03",
-    title: "Laptop vs. Mobile Viewership",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-02-04",
-    title: "Either/Or But Not Both",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-02-05",
-    title: "Order Alphabetically When Condition is Met",
-    chapter_id: "chapter_02",
-    difficulty: "",
-    link: "",
-  },
-
-  {
-    lesson_id: "lesson-03-01",
-    title: "Retrieve Orders Delivered In Certain Days",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-03-02",
-    title: "Sort the Monthly Sales",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-03-03",
-    title: "Sort the Candidates in Ascending Order",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-03-04",
-    title: "Books With Multiple Words But No 'Z'",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-03-05",
-    title: "Movies With Duration Greater Than Average",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-03-06",
-    title: "Anime With Above Average Ratings",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-03-07",
-    title: "Largest Non-Repeating Number",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-
-  {
-    lesson_id: "lesson-03-08",
-    title: "Interesting Movies With Odd Numbered IDs",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-03-09",
-    title: "Daily Active Users",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
-  {
-    lesson_id: "lesson-03-10",
-    title: "JOIN Two Tables",
-    chapter_id: "chapter_03",
-    difficulty: "",
-    link: "",
-  },
+  { title: "SELECT WHERE", chapter_id: 2 },
+  { title: "AND, OR and NOT", chapter_id: 2 },
+  { chapter_id: 2, title: "DISTINCT" },
+  { chapter_id: 2, title: "IN and BETWEEN" },
+  { chapter_id: 2, title: "ORDER BY" },
+  { chapter_id: 2, title: "LIMIT" },
+  { chapter_id: 2, title: "Summary" },
+  { chapter_id: 3, title: "MIN() and MAX()" },
+  { chapter_id: 3, title: "COUNT()" },
+  { chapter_id: 3, title: "SUM() and AVG()" },
+  { chapter_id: 3, title: "Summary" },
+  { chapter_id: 4, title: "GROUP BY" },
+  { chapter_id: 4, title: "HAVING" },
+  { chapter_id: 4, title: "LIKE" },
+  { chapter_id: 4, title: "Wildcards" },
+  { chapter_id: 4, title: "SQL CASE" },
+  { chapter_id: 4, title: "Summary" },
+  { chapter_id: 5, title: "SQL JOINs" },
+  { chapter_id: 5, title: "INNER JOIN" },
+  { chapter_id: 5, title: "LEFT JOIN" },
+  { chapter_id: 5, title: "RIGHT JOIN" },
+  { chapter_id: 5, title: "FULL JOIN" },
+  { chapter_id: 5, title: "Summary" },
+  { chapter_id: 6, title: "Subquery" },
+  { chapter_id: 6, title: "EXISTS" },
+  { chapter_id: 6, title: "Summary" },
+  { chapter_id: 7, title: "INSERT INTO" },
+  { chapter_id: 7, title: "UPDATE" },
+  { chapter_id: 7, title: "DELETE and TRUNCATE" },
+  { chapter_id: 7, title: "Summary" },
+  { chapter_id: 8, title: "Data Types" },
+  { chapter_id: 8, title: "CREATE TABLE" },
+  { chapter_id: 8, title: "CREATE TABLE" },
+  { chapter_id: 8, title: "DROP TABLE" },
+  { chapter_id: 8, title: "Summary" },
+  { chapter_id: 9, title: "Constraints" },
+  { chapter_id: 9, title: "UNIQUE Constraint" },
+  { chapter_id: 9, title: "PRIMARY KEY" },
+  { chapter_id: 9, title: "FOREIGN KEY" },
+  { chapter_id: 9, title: "Summary" },
+  { chapter_id: 10, title: "SQL Views" },
+  { chapter_id: 10, title: "SQL Commands" },
+  { chapter_id: 10, title: "Summary" },
+  { chapter_id: 11, title: "SQL Queries" },
+  { chapter_id: 11, title: "What's Next?" },
 ];
+
+export const LESSONS_TABLE_DATA: Record<TLessonTableField, string | number>[] =
+  LESSONS.map(({ chapter_id, title }, lessonIdx) => ({
+    chapter_id,
+    lesson_id: lessonIdx + 1,
+    title,
+  }));
 
 export const CHAPTERS_TABLE_DATA: Record<
   TChapterTableField,
   string | number
->[] = [
-  {
-    chapter_id: "chapter_01",
-    title: "Introduction",
-    no_of_lessons: 1,
-  },
-
-  {
-    chapter_id: "chapter_02",
-    title: "SQL Basic Queries",
-    no_of_lessons: 5,
-  },
-
-  {
-    chapter_id: "chapter_03",
-    title: "Intermediate Questions",
-    no_of_lessons: 10,
-  },
-];
-
-// ObjectValues<typeof LESSON_TABLE_FIEDS>;
+>[] = CHAPTERS.map(({ id, title: name }) => ({
+  chapter_id: id,
+  title: name,
+  no_of_lessons: LESSONS_TABLE_DATA.filter(
+    ({ chapter_id }) => chapter_id === id
+  ).length,
+}));
 
 export const CREATE_LESSON_TABLE_QUERY = `CREATE TABLE ${TABLES.LESSONS} (
   ${Object.keys(LESSONS_FIELDS_DATA_TYPE)
@@ -280,11 +189,9 @@ export const DATA_TO_INSERT_TO_LESSON_TABLE_QUERY = `INSERT INTO ${
   TABLES.LESSONS
 } (${LESSON_TABLE_FIELDS.map((field) => field).join(", ")})
   VALUES
-  ${LESSONS_TABLE_DATA.map(
-    ({ chapter_id, difficulty, lesson_id, link, title }) => {
-      return `("${lesson_id}", "${title}", "${chapter_id}", "${link}", "${difficulty}")`;
-    }
-  ).join(",")};` as const;
+  ${LESSONS_TABLE_DATA.map(({ chapter_id, lesson_id, title }) => {
+    return `("${lesson_id}", "${title}", "${chapter_id}")`;
+  }).join(",")};` as const;
 
 export const CREATE_CHAPTERS_TABLE_QUERY = `CREATE TABLE ${TABLES.CHAPTERS} (
 ${Object.keys(CHAPTER_FIELDS_WITH_DATA_TYPE)

@@ -1,11 +1,8 @@
 export type ObjectValues<T> = T[keyof T];
 
-type TLesson = {
-  id: string;
-  name: string;
-};
+export type TChapter = { title: string; id: number };
 
-export type TChapter = { name: string; id: string; lessons: TLesson[] };
+export type TLesson = { title: string; chapter_id: TChapter["id"] };
 
 export type TTableInfo = {
   tableName: string;
