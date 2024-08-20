@@ -277,19 +277,6 @@ function App() {
         />
 
         <hr />
-        <Editor
-          height={"50vh"}
-          language="sql"
-          defaultValue={userQuery}
-          onChange={(value) => {
-            setUserQuery(value);
-          }}
-          options={{ fontSize: 14 }}
-          beforeMount={handleEditorWillMount}
-          theme="greyTheme"
-        />
-
-        <hr />
 
         {renderOutputContainer(
           structuredClone(queryResult.result),
