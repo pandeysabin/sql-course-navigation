@@ -30,6 +30,8 @@ function App() {
   const [activeTables, setActiveTables] =
     React.useState<Record<string, initSqlJs.QueryExecResult[]>>();
 
+  const activeTableNames = Object.keys(activeTables ?? {});
+
   const [db, setDb] = React.useState<Database>();
 
   const [error, setError] = React.useState<string>();
@@ -257,35 +259,45 @@ function App() {
       </div>
 
       <div id="table-container">
-        {Object.keys(activeTables ?? {}).map((tableName, tableIdx) => {
+        {activeTableNames.map((tableName, tableIdx) => {
           if (activeTables?.[tableName].length === 0) return null;
 
           return (
-            <table className="chapter-table" key={tableName}>
-              <caption>
-                <span style={{ fontFamily: "EuclidCircularA-Regular" }}>
-                  Chapter:
-                </span>
-                <span style={{ marginLeft: 8 }}> {tableName}</span>
-              </caption>
-              <thead>
-                <tr>
-                  {activeTables?.[tableName][0]?.columns.map((column) => (
-                    <th key={column}>{column}</th>
-                  ))}
-                </tr>
-              </thead>
-
-              <tbody>
-                {activeTables?.[tableName][0]?.values.map((row, idx) => (
-                  <tr key={`${tableName}-${tableIdx}-availbleTable-row-${idx}`}>
-                    {row.map((rowValue) => (
-                      <td key={rowValue?.toString()}>{rowValue}</td>
+            <>
+              <table className="chapter-table" key={tableName}>
+                <caption>
+                  <span style={{ fontFamily: "EuclidCircularA-Regular" }}>
+                    Chapter:
+                  </span>
+                  <span style={{ marginLeft: 8 }}> {tableName}</span>
+                </caption>
+                <thead>
+                  <tr>
+                    {activeTables?.[tableName][0]?.columns.map((column) => (
+                      <th key={column}>{column}</th>
                     ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+
+                <tbody>
+                  {activeTables?.[tableName][0]?.values.map((row, idx) => (
+                    <tr
+                      key={`${tableName}-${tableIdx}-availbleTable-row-${idx}`}
+                    >
+                      {row.map((rowValue) => (
+                        <td key={rowValue?.toString()}>{rowValue}</td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {activeTableNames.length - 1 !== tableIdx && (
+                <div>
+                  <hr />
+                </div>
+              )}
+            </>
           );
         })}
       </div>
