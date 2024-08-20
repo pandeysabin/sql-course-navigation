@@ -12,9 +12,9 @@ export type TChapterTableField = (typeof CHAPTER_TABLE_FIELDS)[number];
 
 export const CHAPTER_FIELDS_WITH_DATA_TYPE: Record<TChapterTableField, string> =
   {
-    chapter_id: "int",
-    no_of_lessons: "int",
+    chapter_id: "INT",
     title: "varchar(50)",
+    no_of_lessons: "INT",
   };
 
 const LESSON_TABLE_FIELDS = [
