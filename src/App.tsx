@@ -106,15 +106,13 @@ function App() {
     }
   }, [queryResult, db]);
 
-  const handleQueryRun = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (db === undefined || userQuery === undefined) {
+  const handleQueryRun = (value: string | undefined) => {
+    if (db === undefined || value === undefined) {
       return;
     }
 
     try {
-      const result = db.exec(userQuery);
+      const result = db.exec(value);
 
       setQueryResult({ error: null, result });
     } catch (error) {
@@ -151,43 +149,65 @@ function App() {
         "editorIndentGuide.activeBackground": "#606060", // Active indentation guide color
       },
     });
+
+    monaco.editor.addEditorAction({
+      id: "run-code",
+      label: "Run Code",
+      run: (editor) => handleQueryRun(editor.getValue()),
+      keybindings: [monaco.KeyMod.CtrlCmd + monaco.KeyCode.Enter],
+    });
   };
 
   const renderOutputContainer = (
     result: initSqlJs.QueryExecResult[] | null,
     error: string | null
   ) => {
-    if (error === null) {
-      return <p style={{ color: "red" }}>{queryResult.error}</p>;
+    if (error !== null) {
+      return <p style={{ color: "red" }}>{error}</p>;
     }
 
     if (result === null) {
       return <p>Your output will be displayed here.</p>;
     }
 
-    return result.map((result, resultIdx) => (
-      <table key={`table-of-query-result-${resultIdx}`}>
-        <thead>
-          <tr>
-            {result.columns.map((column) => (
-              <th key={column}>{column}</th>
-            ))}
-          </tr>
-        </thead>
+    if (result.length > 0) {
+      return result.map(({ columns, values }, resultIdx) => {
+        const tableKey = `table-of-query-result-${resultIdx}` as const;
 
-        <tbody>
-          {result.values.map((value, queryResultTBodyIdx) => (
-            <tr
-              key={`query-result-body-row-${resultIdx}-${queryResultTBodyIdx}`}
-            >
-              {value.map((rowValue) => (
-                <td key={rowValue?.toString()}>{rowValue}</td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    ));
+        return (
+          <table key={tableKey}>
+            <thead>
+              <tr>
+                {columns.map((headerName) => (
+                  <th key={`${tableKey}-${headerName}`}>{headerName}</th>
+                ))}
+              </tr>
+            </thead>
+
+            <tbody>
+              {values.map((value, queryResultTBodyIdx) => {
+                const eachTableRowKey =
+                  `${tableKey}-body-row-${queryResultTBodyIdx}` as const;
+
+                return (
+                  <tr key={eachTableRowKey}>
+                    {value.map((rowValue, cellIdx) => {
+                      return (
+                        <td
+                          key={`${eachTableRowKey}-${cellIdx}-${rowValue?.toString()}`}
+                        >
+                          {rowValue}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        );
+      });
+    }
   };
 
   if (db === undefined) {
@@ -231,40 +251,32 @@ function App() {
       </nav>
 
       <div className="body-container">
-        <form onSubmit={handleQueryRun} className="query-form">
-          {/* <input
-            id="query-input"
-            value={userQuery}
-            placeholder="Write your query"
-            onChange={({ target: { value } }) => {
-              setUserQuery(value);
-            }}
-          /> */}
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <span />
+          <button
+            type="submit"
+            className="query-run-button"
+            onClick={() => handleQueryRun(userQuery)}
+          >
+            Run
+          </button>
+        </div>
 
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <span />
-            <button type="submit" className="query-run-button">
-              Run
-            </button>
-          </div>
+        <hr />
 
-          <hr />
+        <Editor
+          height={"50vh"}
+          language="sql"
+          defaultValue={userQuery}
+          onChange={(value) => {
+            setUserQuery(value);
+          }}
+          options={{ fontSize: 14 }}
+          beforeMount={handleEditorWillMount}
+          theme="greyTheme"
+        />
 
-          <Editor
-            height={"50vh"}
-            language="sql"
-            defaultValue={userQuery}
-            onChange={(value) => {
-              setUserQuery(value);
-            }}
-            className="editor-container"
-            options={{ fontSize: 14 }}
-            beforeMount={handleEditorWillMount}
-            theme="greyTheme"
-          />
-
-          <hr />
-        </form>
+        <hr />
 
         {renderOutputContainer(
           structuredClone(queryResult.result),
