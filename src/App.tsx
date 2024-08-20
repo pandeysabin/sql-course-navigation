@@ -153,6 +153,43 @@ function App() {
     });
   };
 
+  const renderOutputContainer = (
+    result: initSqlJs.QueryExecResult[] | null,
+    error: string | null
+  ) => {
+    if (error === null) {
+      return <p style={{ color: "red" }}>{queryResult.error}</p>;
+    }
+
+    if (result === null) {
+      return <p>Your output will be displayed here.</p>;
+    }
+
+    return result.map((result, resultIdx) => (
+      <table key={`table-of-query-result-${resultIdx}`}>
+        <thead>
+          <tr>
+            {result.columns.map((column) => (
+              <th key={column}>{column}</th>
+            ))}
+          </tr>
+        </thead>
+
+        <tbody>
+          {result.values.map((value, queryResultTBodyIdx) => (
+            <tr
+              key={`query-result-body-row-${resultIdx}-${queryResultTBodyIdx}`}
+            >
+              {value.map((rowValue) => (
+                <td key={rowValue?.toString()}>{rowValue}</td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    ));
+  };
+
   if (db === undefined) {
     return <p>loading...</p>;
   }
@@ -229,33 +266,10 @@ function App() {
           <hr />
         </form>
 
-        {queryResult.error && (
-          <p style={{ color: "red" }}>{queryResult.error}</p>
+        {renderOutputContainer(
+          structuredClone(queryResult.result),
+          queryResult.error
         )}
-
-        {queryResult.result?.map((result, resultIdx) => (
-          <table key={`table-of-query-result-${resultIdx}`}>
-            <thead>
-              <tr>
-                {result.columns.map((column) => (
-                  <th key={column}>{column}</th>
-                ))}
-              </tr>
-            </thead>
-
-            <tbody>
-              {result.values.map((value, queryResultTBodyIdx) => (
-                <tr
-                  key={`query-result-body-row-${resultIdx}-${queryResultTBodyIdx}`}
-                >
-                  {value.map((rowValue) => (
-                    <td key={rowValue?.toString()}>{rowValue}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ))}
       </div>
 
       <div id="table-container">
@@ -263,18 +277,18 @@ function App() {
           if (activeTables?.[tableName].length === 0) return null;
 
           return (
-            <>
-              <table className="chapter-table" key={tableName}>
+            <React.Fragment key={tableName}>
+              <table className="chapter-table">
                 <caption>
                   <span style={{ fontFamily: "EuclidCircularA-Regular" }}>
-                    Chapter:
+                    Table:
                   </span>
                   <span style={{ marginLeft: 8 }}> {tableName}</span>
                 </caption>
                 <thead>
                   <tr>
                     {activeTables?.[tableName][0]?.columns.map((column) => (
-                      <th key={column}>{column}</th>
+                      <th key={`${tableName}-${column}`}>{column}</th>
                     ))}
                   </tr>
                 </thead>
@@ -284,8 +298,12 @@ function App() {
                     <tr
                       key={`${tableName}-${tableIdx}-availbleTable-row-${idx}`}
                     >
-                      {row.map((rowValue) => (
-                        <td key={rowValue?.toString()}>{rowValue}</td>
+                      {row.map((rowValue, rowValueIdx) => (
+                        <td
+                          key={`${tableName}-${rowValueIdx}-${rowValue?.toString()}`}
+                        >
+                          {rowValue}
+                        </td>
                       ))}
                     </tr>
                   ))}
@@ -297,7 +315,7 @@ function App() {
                   <hr />
                 </div>
               )}
-            </>
+            </React.Fragment>
           );
         })}
       </div>
