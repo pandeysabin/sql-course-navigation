@@ -1,5 +1,7 @@
 import * as React from "react";
 
+import Editor, { Monaco } from "@monaco-editor/react";
+
 import initSqlJs, { Database } from "sql.js";
 
 import "./App.css";
@@ -13,7 +15,9 @@ import {
 import { TTableInfo } from "./interface";
 
 function App() {
-  const [userQuery, setUserQuery] = React.useState(`SELECT * FROM lessons;`);
+  const [userQuery, setUserQuery] = React.useState<string | undefined>(
+    `SELECT * FROM lessons;`
+  );
 
   const [queryResult, setQueryResult] = React.useState<{
     result: initSqlJs.QueryExecResult[] | null;
@@ -103,7 +107,7 @@ function App() {
   const handleQueryRun = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (db === undefined) {
+    if (db === undefined || userQuery === undefined) {
       return;
     }
 
@@ -122,6 +126,29 @@ function App() {
 
       console.error(message);
     }
+  };
+
+  const handleEditorWillMount = (monaco: Monaco) => {
+    // here is the monaco instance
+    // do something before editor is mounted
+    monaco.editor.defineTheme("greyTheme", {
+      base: "vs-dark", // or 'vs' for light mode
+      inherit: true,
+      rules: [
+        { background: "2E2E2E" }, // Grey background color
+        { token: "", foreground: "D4D4D4" }, // Light grey text color
+      ],
+      colors: {
+        "editor.background": "#2E2E2E", // Editor background color
+        "editor.foreground": "#D4D4D4", // Default text color
+        "editorLineNumber.foreground": "#5A5A5A", // Line numbers color
+        "editorCursor.foreground": "#FFFFFF", // Cursor color
+        "editor.selectionBackground": "#4B4B4B", // Selection background color
+        "editor.lineHighlightBackground": "#333333", // Current line highlight color
+        "editorIndentGuide.background": "#404040", // Indentation guide color
+        "editorIndentGuide.activeBackground": "#606060", // Active indentation guide color
+      },
+    });
   };
 
   if (db === undefined) {
@@ -166,18 +193,38 @@ function App() {
 
       <div className="body-container">
         <form onSubmit={handleQueryRun} className="query-form">
-          <input
+          {/* <input
             id="query-input"
             value={userQuery}
             placeholder="Write your query"
             onChange={({ target: { value } }) => {
               setUserQuery(value);
             }}
+          /> */}
+
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <span />
+            <button type="submit" className="query-run-button">
+              Run
+            </button>
+          </div>
+
+          <hr />
+
+          <Editor
+            height={"50vh"}
+            language="sql"
+            defaultValue={userQuery}
+            onChange={(value) => {
+              setUserQuery(value);
+            }}
+            className="editor-container"
+            options={{ fontSize: 14 }}
+            beforeMount={handleEditorWillMount}
+            theme="greyTheme"
           />
 
-          <button type="submit" className="query-run-button">
-            Run
-          </button>
+          <hr />
         </form>
 
         {queryResult.error && (

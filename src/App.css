@@ -48,6 +48,7 @@ hr {
   background-color: var(--programiz-brand-divider);
   height: 1px;
   border: none;
+  width: 100%;
 }
 
 .fields {
@@ -80,6 +81,7 @@ hr {
 .query-form {
   display: flex;
   gap: 8px;
+  flex-direction: column;
 }
 
 .query-run-button {
@@ -90,6 +92,7 @@ hr {
   color: white;
   border-radius: 4px;
   flex-basis: 100px;
+  padding: 8px 12px;
 }
 
 .query-run-button:hover {
@@ -121,4 +124,8 @@ td {
 
 .chapter-table > caption {
   margin-bottom: 8px;
+}
+
+.editor-container {
+  border-bottom: 2px solid var(--programiz-brand-divider);
 }
