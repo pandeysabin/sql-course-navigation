@@ -129,7 +129,3 @@ td {
 .chapter-table > caption {
   margin-bottom: 8px;
 }
-
-.editor-container {
-  border-bottom: 2px solid var(--programiz-brand-divider);
-}
