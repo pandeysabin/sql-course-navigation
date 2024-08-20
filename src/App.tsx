@@ -257,7 +257,6 @@ function App() {
             onChange={(value) => {
               setUserQuery(value);
             }}
-            className="editor-container"
             options={{ fontSize: 14 }}
             beforeMount={handleEditorWillMount}
             theme="greyTheme"
